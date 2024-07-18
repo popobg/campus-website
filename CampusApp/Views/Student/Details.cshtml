@@ -1,0 +1,54 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+@if (Model is null)
+{
+    <p>No student found</p>
+}
+else
+{
+    <h1>About student @Model.Name @Model.LastName</h1>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Student info</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td>Last name</td>
+                <td>@Model.LastName</td>
+            </tr>
+            <tr>
+                <td>date of birth</td>
+                <td>@Model.Birthdate</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Enrolled</td>
+                @if (Model.IsEnrolled)
+                {
+                    <td>&#9989;</td>
+                }
+                else
+                {
+                    <td>&#10060;</td>
+                }
+            </tr>
+        </tbody>
+    </table>
+    
+    <a class ="btn btn-primary" href="@Url.ActionLink("List", "Student")">Come back to the list</a>
+}

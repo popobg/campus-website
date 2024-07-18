@@ -1,0 +1,57 @@
+﻿@model List<Student>
+
+@{
+    ViewData["Title"] = "Students List";
+}
+
+<h1>List of students</h1>
+
+@if (Model is not null && Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Last name</th>
+                <th>Edit</th>
+                <th>Details</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Student student in Model)
+            {
+                <tr>
+                    <td>
+                        @student.Id
+                    </td>
+                    <td>
+                        @student.Name
+                    </td>
+                    <td>
+                        @student.LastName
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.ActionLink("Edit", "Student", new {StudentId = student.Id})">Edit</a>
+
+                        @* Another way to redirect the user:
+                        <a asp-action="Edit" asp-controller="Student" asp-route-StudentId="@student.Id">Edit</button> *@
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.ActionLink("Details", "Student", new {StudentId = student.Id})">Details</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="@Url.ActionLink("Delete", "Student", new {StudentId = student.Id})">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" asp-area="" asp-controller="Student" asp-action="Add">Add new student</a>
+}
+else
+    {
+        <p>No student found.</p>
+    }
