@@ -21,22 +21,26 @@ else
 
         <div class="mt-3 form-group">
             <label asp-for="Name" class="control-label">Name</label>
-            <input type="text" asp-for="Name" class="form-control" />
+            <input type="text" asp-for="Name" class="form-control" required="true" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="mt-3 form-group">
             <label asp-for="LastName" class="control-label">Last name</label>
-            <input type="text" asp-for="LastName" class="form-control" />
+            <input type="text" asp-for="LastName" class="form-control" required="true" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
         <div class="mt-3 form-group">
             <label asp-for="Birthdate" class="control-label">Date of birth</label>
-            <input type="date" asp-for="Birthdate" class="form-control" />
+            <input type="date" asp-for="Birthdate" class="form-control" required="true" />
+            <span asp-validation-for="Birthdate" class="text-danger"></span>
         </div>
 
         <div class="mt-3 form-group">
             <label asp-for="Email" class="control-label">Email address</label>
-            <input type="email" asp-for="Email" class="form-control" />
+            <input type="email" asp-for="Email" class="form-control" required="true" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="mt-3 form-group form-check">

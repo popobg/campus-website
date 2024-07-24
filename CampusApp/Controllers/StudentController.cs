@@ -1,4 +1,5 @@
-﻿using CampusApp.Models;
+﻿using CampusApp.Interface;
+using CampusApp.Models;
 using CampusApp.Models.ViewModels;
 using CampusApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -7,24 +8,35 @@ namespace CampusApp.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly IStudentRepository _repo;
+
+        public StudentController(IStudentRepository repo)
+        {
+            _repo = repo;
+        }
+
         // IActionResult = interface implementing all the web objects returned
         // in .NET Core (very generic)
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            return View(StudentRepository.GetStudents());
+            var students = await _repo.GetStudentsAsync();
+
+            return View(students);
         }
 
         [HttpGet]
-        public IActionResult Details(int StudentId)
+        public async Task<IActionResult> Details(int StudentId)
         {
-            return View(StudentRepository.GetStudentById(StudentId));
+            var student = await _repo.GetStudentByIdAsync(StudentId);
+
+            return View(student);
         }
 
         [HttpGet]
-        public IActionResult Edit(int StudentId)
+        public async Task<IActionResult> Edit(int StudentId)
         {
-            var student = StudentRepository.GetStudentById(StudentId);
+            var student = await _repo.GetStudentByIdAsync(StudentId);
 
             if (student is null) return RedirectToAction(actionName: "List", controllerName: "Student");
             // same as: if (student is null) return View("List", StudentRepository.GetStudents());
@@ -33,21 +45,11 @@ namespace CampusApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int studentId, Student student)
+        public async Task<IActionResult> Edit(int studentId, Student student)
         {
-            if (studentId != student.Id) return BadRequest();
+            if (!ModelState.IsValid) return View(student);
 
-            var studentToUpdate = new Student()
-            {
-                Id = student.Id,
-                Name = student.Name,
-                LastName = student.LastName,
-                Birthdate = student.Birthdate,
-                Email = student.Email,
-                IsEnrolled = student.IsEnrolled
-            };
-
-            StudentRepository.UpdateStudent(studentToUpdate);
+            await _repo.EditStudentAsync(student);
 
             return RedirectToAction("List", "Student");
         }
@@ -63,28 +65,20 @@ namespace CampusApp.Controllers
         // We create a new Model for the info about a new student,
         // because it is different from our original Model Student
         [HttpPost]
-        public IActionResult Add(AddStudent studentAdded)
+        public async Task<IActionResult> Add(AddStudent studentAdded)
         {
             // if invalid, returns in the View, into the asp-validation field
             if (!ModelState.IsValid) return View(studentAdded);
 
-            StudentRepository.AddStudent(studentAdded);
+            await _repo.AddStudentAsync(studentAdded);
 
             return RedirectToAction("List", "Student");
         }
 
         [HttpGet]
-        public IActionResult Delete(int StudentId, Student student)
+        public async Task<IActionResult> Delete(int StudentId)
         {
-            StudentRepository.DeleteStudent(StudentId);
-
-            return RedirectToAction("List", "Student");
-        }
-
-        [HttpDelete]
-        public IActionResult Delete(int StudentId)
-        {
-            if (StudentRepository.DeleteStudent(StudentId)) return Ok();
+            if (await _repo.DeleteStudentAsync(StudentId)) return RedirectToAction("List", "Student");
 
             return NotFound();
         }

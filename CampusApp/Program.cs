@@ -1,3 +1,8 @@
+using CampusApp.Data;
+using CampusApp.Interface;
+using CampusApp.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace CampusApp
 {
     public class Program
@@ -9,6 +14,23 @@ namespace CampusApp
             // Add services to the container: builder's configuration;
             // always before building the app.
             builder.Services.AddControllersWithViews();
+
+            // dependancy injection to create our DbContext ==> create DB
+            builder.Services.AddDbContext<CampusDbContext>(options =>
+            {
+                // specify the DBMS (`UseSqlServer` here)
+                // Specify the name of the connection string that is in the appsettings.json,
+                // which will be the name of the created DB
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CampusDb"));
+            });
+
+            // Local repo and datas
+            //builder.Services.AddScoped<IStudentRepository, StudentLocalRepository>();
+            //builder.Services.AddScoped<ICourseRepository, CourseLocalRepository>();
+
+            // SQL DB
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
             var app = builder.Build();
 
@@ -23,11 +45,9 @@ namespace CampusApp
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=MainPage}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

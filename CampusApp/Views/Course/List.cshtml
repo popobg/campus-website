@@ -1,0 +1,47 @@
+﻿@model List<CampusApp.Models.Course>
+
+
+@{
+    ViewData["Title"] = "Courses List";
+}
+
+<h1>List of courses</h1>
+
+@if (Model is not null && Model.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Course course in Model)
+            {
+                <tr>
+                    <td>
+                        @course.Id
+                    </td>
+                    <td>
+                        @course.Name
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.ActionLink("Edit", "Course", new {CourseId = course.Id})">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="@Url.ActionLink("Delete", "Course", new {CourseId = course.Id})">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" asp-area="" asp-controller="Course" asp-action="Add">Add new course</a>
+}
+else
+{
+    <p>No course found.</p>
+}
