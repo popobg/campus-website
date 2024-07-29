@@ -2,10 +2,12 @@
 using CampusApp.Models;
 using CampusApp.Models.ViewModels;
 using CampusApp.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CampusApp.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly IStudentRepository _repo;

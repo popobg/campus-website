@@ -7,7 +7,7 @@ namespace CampusApp.Data
     {
         // ctor + double tab
         // constructor with dependancy injection --> create in program.cs
-        public CampusDbContext(DbContextOptions options) : base(options) { }
+        public CampusDbContext(DbContextOptions<CampusDbContext> options) : base(options) { }
 
         // DbSet: all the models that will be into the DB
         public DbSet<Student> Students { get; set; }
